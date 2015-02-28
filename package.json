@@ -8,7 +8,7 @@
     "build": "npm install && node_modules/.bin/coffee -o lib/ -c src/"
   },
   "author": "",
-  "license": "APGL",
+  "license": "WTFPL",
   "dependencies": {
     "http-proxy": "^1.8.1",
     "js-yaml": "^3.2.7",
