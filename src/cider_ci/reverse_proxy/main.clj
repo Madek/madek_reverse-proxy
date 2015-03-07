@@ -12,9 +12,14 @@
     [cider-ci.utils.map :refer [deep-merge]]
     [cider-ci.utils.nrepl :as nrepl]
     [cider-ci.utils.with :as with]
+    [compojure.core :as cpj]
+    [compojure.handler :as cpj.handler]
+    [ring.util.response :refer [file-response]]
     [clj-logging-config.log4j :as logging-config]
     [clojure.tools.logging :as logging]
     ))
+
+;##############################################################################
 
 (defn get-patterns-and-ports []
   (->> (get-config)
@@ -45,10 +50,28 @@
         (logging/info msg)
         {:status 404 :body msg}))))
 
+;##############################################################################
+
+(defn docs-handler [request]
+  (let [path (-> request :route-params :*)
+        file-path (str "../documentation/" path )]
+    (logging/info "SERVE documentation: " path)
+    (file-response file-path)))
+
+;##############################################################################
+
+(defn build-main-handler [proxy-handler]
+  (cpj/routes
+    (cpj/ANY "/cider-ci/docs/*" request docs-handler)
+    (cpj/ANY "*" request proxy-handler)))
+
 (defn initialize []
   (let [http-conf (-> (get-config) :reverse_proxy :http)
-        handler (reverse-proxy/create-handler #'dispatcher)]
+        proxy-handler (reverse-proxy/create-handler #'dispatcher)
+        handler (build-main-handler proxy-handler) ]
     (http-server/start http-conf handler)))
+
+;##############################################################################
 
 (defn -main [& args]
   (with/logging 
