@@ -60,9 +60,15 @@
 
 ;##############################################################################
 
+(defn redirect-to-ui []
+  (logging/info "REDIRECT to UI" )
+  {:status 301 
+   :headers {"Location" "/cider-ci/ui/"}})
+
 (defn build-main-handler [proxy-handler]
   (cpj/routes
     (cpj/ANY "/cider-ci/docs/*" request docs-handler)
+    (cpj/ANY "/" [] (redirect-to-ui))
     (cpj/ANY "*" request proxy-handler)))
 
 (defn initialize []
