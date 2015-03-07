@@ -1,3 +1,17 @@
+pom.xml.asc
+pom.xml
 node_modules/
 lib/
+/tmp
+/target
+/log
+/config
+/classes
+/checkouts
+/.nrepl-port
+/.lein-*
+.nrepl-port
+.lein-repl-history 
 *.log
+*.jar
+*.class
