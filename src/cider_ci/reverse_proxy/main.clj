@@ -106,9 +106,10 @@
 
 (defn -main [& args]
   (with/logging 
-    (config/initialize ["../config/config_default.yml" "./config/config_default.yml" "./config/config.yml"])
+    (config/initialize)
     (nrepl/initialize (-> (get-config) :reverse_proxy :nrepl))
     (initialize)))
+
 
 ;### Debug ####################################################################
 ;(logging-config/set-logger! :level :debug)

@@ -8,13 +8,11 @@
             :url "http://www.gnu.org/licenses/agpl-3.0.html"}
   :dependencies [
                  [cider-ci/clj-auth "2.2.2"]
-                 [cider-ci/clj-utils "2.7.0"]
+                 [cider-ci/clj-utils "2.12.0"]
                  [com.cemerick/url "0.1.1"]
-                 [drtom/clj-uuid "0.0.8"]
-                 [drtom/honeysql "1.1.0"]
                  [org.apache.commons/commons-io "1.3.2"]
                  [org.clojure/core.incubator "0.1.3"]
-                 [org.clojure/tools.nrepl "0.2.7"]
+                 [org.clojure/tools.nrepl "0.2.8"]
                  ]
   :source-paths [ "src"]
   :profiles {:dev 
