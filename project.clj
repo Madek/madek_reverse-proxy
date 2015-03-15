@@ -21,7 +21,7 @@
              {:dependencies [[midje "1.6.3"]]
               :plugins [[lein-midje "3.1.1"]]
               :repositories [["tmp" {:url "http://maven-repo-tmp.drtom.ch" :snapshots false}]]
-              :resource-paths ["../config" "./config" "./resources"]}
+              :resource-paths ["./config" "./resources" "../config"]}
              :production
              {:resource-paths ["/etc/cider-ci" "../config" "./config" "./resources"]}} 
   :aot [cider-ci.reverse-proxy.main] 
