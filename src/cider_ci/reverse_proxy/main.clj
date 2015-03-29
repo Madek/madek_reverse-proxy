@@ -3,8 +3,10 @@
 ; See the "LICENSE.txt" file provided with this software.
 
 (ns cider-ci.reverse-proxy.main
+  (:import 
+    [org.apache.http.client.utils URIBuilder]
+    )
   (:require 
-    [cemerick.url :as url-util]
     [cider-ci.reverse-proxy.proxy :as reverse-proxy]
     [cider-ci.utils.config :as config :refer [get-config]]
     [cider-ci.utils.debug :as debug]
@@ -51,15 +53,16 @@
        second))
 
 (defn dispatcher [request,handler]
-  (let [proxy-url (url-util/url (:proxy-url request))
-        path (:path proxy-url)]
+  (let [req-url (URIBuilder. (:proxy-url request))
+        target-url (URIBuilder. (:proxy-url request)) 
+        path (.getPath req-url)]
     (if-let [port (find-port-for-path path)]
-      (let [url (str (assoc proxy-url :port port))
-            res (handler (assoc request :url url)) ]
+      (let [_ (.setPort target-url port)
+            res (handler (assoc request :url (str target-url)))]
         (logging/info (str (format-method (:proxy-request request)) 
-                           " " proxy-url " -> " url " " (:status res)))
+                           " " req-url " -> " target-url " " (:status res)))
         res )
-      (let [msg (str "CIDER-CI_REVERSE-PROXY no target for " proxy-url)]
+      (let [msg (str "CIDER-CI_REVERSE-PROXY no target for " req-url)]
         (logging/info msg)
         {:status 404 :body msg}))))
 
