@@ -9,18 +9,19 @@
   (:require 
     [cider-ci.reverse-proxy.proxy :as reverse-proxy]
     [cider-ci.utils.config :as config :refer [get-config]]
-    [cider-ci.utils.debug :as debug]
     [cider-ci.utils.http-server :as http-server]
     [cider-ci.utils.map :refer [deep-merge]]
     [cider-ci.utils.nrepl :as nrepl]
     [cider-ci.utils.routing :as routing]
-    [cider-ci.utils.with :as with]
     [clj-logging-config.log4j :as logging-config]
     [clojure.tools.logging :as logging]
     [compojure.core :as cpj]
     [compojure.handler :as cpj.handler]
+    [drtom.logbug.catcher :refer :all]
+    [drtom.logbug.debug :as debug]
+    [drtom.logbug.ring :refer [wrap-handler-with-logging]]
     [ring.util.response :refer [file-response]]
-    ))
+     ))
 
 
 ;##############################################################################
@@ -90,7 +91,7 @@
    :headers {"Location" "/cider-ci/ui/"}})
 
 (defn build-main-handler [proxy-handler]
-  (routing/wrap-debug-logging 
+  (wrap-handler-with-logging 
     (cpj/routes
       (cpj/ANY "/cider-ci/docs/*" request docs-handler)
       (cpj/ANY "/cider-ci/demo-project-bash/*" request demo-project-handler)
@@ -108,7 +109,7 @@
 ;##############################################################################
 
 (defn -main [& args]
-  (with/logging 
+  (wrap-with-log-error
     (config/initialize)
     (nrepl/initialize (-> (get-config) :reverse_proxy :nrepl))
     (initialize)))
