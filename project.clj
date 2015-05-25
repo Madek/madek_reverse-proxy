@@ -25,4 +25,5 @@
   :aot [cider-ci.reverse-proxy.main] 
   :main cider-ci.reverse-proxy.main 
   :jvm-opts ["-Xmx64m"]
+  :repl-options {:timeout  120000}
   )
