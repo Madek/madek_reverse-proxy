@@ -8,7 +8,7 @@
             :url "http://www.gnu.org/licenses/agpl-3.0.html"}
   :dependencies [
                  [drtom/logbug "1.0.0"]
-                 [cider-ci/clj-utils "3.0.0-rc.1"]
+                 [cider-ci/clj-utils "3.0.0-rc.4"]
                  [org.apache.commons/commons-io "1.3.2"]
                  [org.apache.httpcomponents/httpclient "4.4.1"]
                  [org.clojure/core.incubator "0.1.3"]

@@ -83,6 +83,18 @@
     (file-response file-path)))
 
 
+;### shutdown #################################################################
+
+(defn shutdown [request]
+  (do (future (System/exit 0))
+    {:status 204 }))
+
+(defn wrap-shutdown [default-handler]
+  (cpj/routes
+    (cpj/POST "/shutdown" request #'shutdown)
+    (cpj/ANY "*" request default-handler)))
+
+
 ;##############################################################################
 
 (defn redirect-to-ui []
@@ -91,13 +103,14 @@
    :headers {"Location" "/cider-ci/ui/"}})
 
 (defn build-main-handler [proxy-handler]
-  (wrap-handler-with-logging 
-    (cpj/routes
-      (cpj/ANY "/cider-ci/docs/*" request docs-handler)
-      (cpj/ANY "/cider-ci/demo-project-bash/*" request demo-project-handler)
-      (cpj/ANY "/" [] (redirect-to-ui))
-      (cpj/ANY "*" request proxy-handler))
-    'cider-ci.reverse-proxy.main))
+  (-> (cpj/routes
+        (cpj/ANY "/cider-ci/docs/*" request docs-handler)
+        (cpj/ANY "/cider-ci/demo-project-bash/*" request demo-project-handler)
+        (cpj/ANY "/" [] (redirect-to-ui))
+        (cpj/ANY "*" request proxy-handler))
+      (wrap-handler-with-logging 'cider-ci.reverse-proxy.main)
+      wrap-shutdown
+      (wrap-handler-with-logging 'cider-ci.reverse-proxy.main)))
 
 (defn initialize []
   (let [http-conf (-> (get-config) :reverse_proxy :http)
