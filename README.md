@@ -2,9 +2,9 @@
 # Cider-CI Reverse Proxy for Testing and Development
 
 
-Part of [Cider-CI](https://github.com/cider-ci/cider-ci). 
+Part of [Cider-CI](https://github.com/cider-ci/cider-ci).
 
-## Requirements 
+## Requirements
 
 This component is a submodule of [Cider-CI/cider-ci][]. It makes only sense in context of that.
 

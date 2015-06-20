@@ -3,10 +3,10 @@
 ; See the "LICENSE.txt" file provided with this software.
 
 (ns cider-ci.reverse-proxy.main
-  (:import 
+  (:import
     [org.apache.http.client.utils URIBuilder]
     )
-  (:require 
+  (:require
     [cider-ci.reverse-proxy.proxy :as reverse-proxy]
     [cider-ci.utils.config :as config :refer [get-config]]
     [cider-ci.utils.http-server :as http-server]
@@ -40,7 +40,7 @@
        :services
        (map (fn [[k v]] v))
        (map :http)
-       (map (fn [c] [(-> (str (:context c) (:sub_context c)) 
+       (map (fn [c] [(-> (str (:context c) (:sub_context c))
                          java.util.regex.Pattern/quote
                          (#(str "(?i)^" % ".*"))
                          re-pattern)
@@ -48,19 +48,19 @@
 
 (defn find-port-for-path [path]
   (->> (get-patterns-and-ports)
-       (filter (fn [pp] 
+       (filter (fn [pp]
                  (re-matches (first pp) path)))
-       first 
+       first
        second))
 
 (defn dispatcher [request,handler]
   (let [req-url (URIBuilder. (:proxy-url request))
-        target-url (URIBuilder. (:proxy-url request)) 
+        target-url (URIBuilder. (:proxy-url request))
         path (.getPath req-url)]
     (if-let [port (find-port-for-path path)]
       (let [_ (.setPort target-url port)
             res (handler (assoc request :url (str target-url)))]
-        (logging/info (str (format-method (:proxy-request request)) 
+        (logging/info (str (format-method (:proxy-request request))
                            " " req-url " -> " target-url " " (:status res)))
         res )
       (let [msg (str "CIDER-CI_REVERSE-PROXY no target for " req-url)]
@@ -99,7 +99,7 @@
 
 (defn redirect-to-ui []
   (logging/info "REDIRECT to UI" )
-  {:status 301 
+  {:status 301
    :headers {"Location" "/cider-ci/ui/"}})
 
 (defn build-main-handler [proxy-handler]

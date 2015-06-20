@@ -2,7 +2,7 @@
 ; See the "LICENSE.txt" file provided with this software.
 
 (ns cider-ci.reverse-proxy.proxy
-  (:require 
+  (:require
     [clj-http.client :as http-client]
     [clj-logging-config.log4j :as logging-config]
     [clojure.core.incubator :refer [dissoc-in]]
@@ -15,12 +15,12 @@
        (catch Exception e
          (logging/warn {:error e})
          {:status 500
-          :body (str "ERROR when requesting URL: " 
+          :body (str "ERROR when requesting URL: "
                      (:url request) " EXCEPTION: " e)})))
 
 (defn read-body [req]
   (-> req
-      (assoc :body (org.apache.commons.io.IOUtils/toByteArray 
+      (assoc :body (org.apache.commons.io.IOUtils/toByteArray
                      (:body req)))
       (dissoc-in [:headers "content-length"])))
 
@@ -28,7 +28,7 @@
   (-> req
       (select-keys [:body :headers])
       read-body
-      (conj {:as :stream 
+      (conj {:as :stream
              :decode-cookies false
              :decompress-body false
              :follow-redirects false
