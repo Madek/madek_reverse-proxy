@@ -63,25 +63,9 @@
         (logging/info (str (format-method (:proxy-request request))
                            " " req-url " -> " target-url " " (:status res)))
         res )
-      (let [msg (str "CIDER-CI_REVERSE-PROXY no target for " req-url)]
+      (let [msg (str "REVERSE-PROXY no target for " req-url)]
         (logging/info msg)
         {:status 404 :body msg}))))
-
-
-;##############################################################################
-
-(defn docs-handler [request]
-  (let [path (-> request :route-params :*)
-        file-path (str "../documentation/" path )]
-    (log-fileserver-request request "/cider-ci/docs/" path)
-    (file-response file-path)))
-
-(defn demo-project-handler [request]
-  (let [path (-> request :route-params :*)
-        file-path (str "../.git/modules/demo-project-bash/" path )]
-    (log-fileserver-request request "/cider-ci/demo-project-bash/" path)
-    (file-response file-path)))
-
 
 ;### shutdown #################################################################
 
@@ -97,16 +81,8 @@
 
 ;##############################################################################
 
-(defn redirect-to-ui []
-  (logging/info "REDIRECT to UI" )
-  {:status 301
-   :headers {"Location" "/cider-ci/ui/"}})
-
 (defn build-main-handler [proxy-handler]
   (-> (cpj/routes
-        (cpj/ANY "/cider-ci/docs/*" request docs-handler)
-        (cpj/ANY "/cider-ci/demo-project-bash/*" request demo-project-handler)
-        (cpj/ANY "/" [] (redirect-to-ui))
         (cpj/ANY "*" request proxy-handler))
       (wrap-handler-with-logging 'cider-ci.reverse-proxy.main)
       wrap-shutdown
@@ -123,9 +99,14 @@
 
 (defn -main [& args]
   (wrap-with-log-error
-    (config/initialize)
+    (config/initialize
+      ["./config/settings.yml"
+       "../config/settings.yml"
+       "./config/settings.local.yml"
+       "../config/settings.local.yml"])
     (nrepl/initialize (-> (get-config) :reverse_proxy :nrepl))
-    (initialize)))
+    (initialize)
+    ))
 
 
 ;### Debug ####################################################################

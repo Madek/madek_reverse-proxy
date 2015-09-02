@@ -2,13 +2,13 @@
 ; Licensed under the terms of the GNU Affero General Public License v3.
 ; See the "LICENSE.txt" file provided with this software.
 
-(defproject cider-ci_reverse-proxy "1.0.2"
-  :description "Cider-CI Reverse-Proxy"
+(defproject madek_reverse-proxy "1.0.2"
+  :description "Madek Reverse-Proxy"
   :license {:name "GNU AFFERO GENERAL PUBLIC LICENSE Version 3"
             :url "http://www.gnu.org/licenses/agpl-3.0.html"}
   :dependencies [
                  [drtom/logbug "1.2.3"]
-                 [cider-ci/clj-utils "3.0.3"]
+                 [cider-ci/clj-utils "3.2.0-beta.3"]
                  [org.apache.commons/commons-io "1.3.2"]
                  [org.apache.httpcomponents/httpclient "4.5"]
                  [org.clojure/core.incubator "0.1.3"]
