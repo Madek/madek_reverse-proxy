@@ -7,12 +7,12 @@
   :license {:name "GNU AFFERO GENERAL PUBLIC LICENSE Version 3"
             :url "http://www.gnu.org/licenses/agpl-3.0.html"}
   :dependencies [
-                 [drtom/logbug "1.2.3"]
-                 [cider-ci/clj-utils "3.2.0-beta.3"]
+                 [drtom/logbug "1.3.0"]
+                 [cider-ci/clj-utils "3.2.2"]
                  [org.apache.commons/commons-io "1.3.2"]
-                 [org.apache.httpcomponents/httpclient "4.5"]
+                 [org.apache.httpcomponents/httpclient "4.5.1"]
                  [org.clojure/core.incubator "0.1.3"]
-                 [org.clojure/tools.nrepl "0.2.10"]
+                 [org.clojure/tools.nrepl "0.2.11"]
                  ]
   :source-paths [ "src"]
   :profiles {:dev
